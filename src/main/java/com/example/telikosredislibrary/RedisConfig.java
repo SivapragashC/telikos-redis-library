@@ -27,9 +27,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Getter
 public class RedisConfig {
 
-    @Value("${redison-cache.url}")
-    private String url;
-
     @Autowired
     Environment env;
 
