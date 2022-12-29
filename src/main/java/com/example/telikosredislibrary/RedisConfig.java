@@ -6,12 +6,14 @@ import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.spring.data.connection.RedissonConnectionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -28,10 +30,14 @@ public class RedisConfig {
     @Value("${redison-cache.url}")
     private String url;
 
+    @Autowired
+    Environment env;
+
     @Bean()
     RedissonClient redisson() {
         Config config = new Config();
-        config.useSingleServer().setAddress(url);
+        String redisProtocol = Boolean.parseBoolean(env.getProperty("redis.ssl")) ? "redis://" : "rediss://";
+        config.useSingleServer().setAddress(redisProtocol + env.getProperty("redis.host")  +  ":" +   Integer.parseInt(env.getProperty("redis.port")));
         return Redisson.create(config);
     }
 
