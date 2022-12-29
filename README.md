@@ -9,6 +9,7 @@ Step4: Call get and put methods of CacheImpl class from telikos-redis-library
 ## The library was created to expose 3 mothods ... Those are
 
 Get method to read the data from redis cache based on the key provided from consumer service
+
 Two overloaded Put methods for writing the data into redis cache
 
 ## TTL configuration
