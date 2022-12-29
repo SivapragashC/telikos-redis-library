@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class CacheImplTest {
 
     @MockBean
-    ReactiveRedisTemplate<Object,Object> reactiveRedisTemplate;
+    ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate;
 
     @MockBean
     ReactiveRedisConnectionFactory reactiveRedisConnectionFactory;
@@ -38,7 +38,7 @@ public class CacheImplTest {
 
     @Test
     void cacheGetTest() {
-        String booking="{\n  \"bookingId\": \"B38\",\n  \"logisticId\": \"L38\",\n  \"captureData\": \"Captured\",\n  \"bookingStatus\": \"Submitted\",\n  \"validationMessage\": \"Unknown\",\n  \"isFulfilment\": false\n}\n";
+        String booking = "{\n  \"bookingId\": \"B38\",\n  \"logisticId\": \"L38\",\n  \"captureData\": \"Captured\",\n  \"bookingStatus\": \"Submitted\",\n  \"validationMessage\": \"Unknown\",\n  \"isFulfilment\": false\n}\n";
         when(reactiveRedisTemplate.opsForValue()).thenReturn(valueOperations);
         when(valueOperations.get(anyString())).thenReturn(Mono.just(booking));
         StepVerifier.create(reactiveRedisTemplate.opsForValue().get("B38"))
@@ -48,10 +48,10 @@ public class CacheImplTest {
 
     @Test
     void cachePutTest() {
-        String booking="{\n  \"bookingId\": \"B38\",\n  \"logisticId\": \"L38\",\n  \"captureData\": \"Captured\",\n  \"bookingStatus\": \"Submitted\",\n  \"validationMessage\": \"Unknown\",\n  \"isFulfilment\": false\n}\n";
+        String booking = "{\n  \"bookingId\": \"B38\",\n  \"logisticId\": \"L38\",\n  \"captureData\": \"Captured\",\n  \"bookingStatus\": \"Submitted\",\n  \"validationMessage\": \"Unknown\",\n  \"isFulfilment\": false\n}\n";
         when(reactiveRedisTemplate.opsForValue()).thenReturn(valueOperations);
-        when(valueOperations.set(anyString(),any(),any())).thenReturn(Mono.just(true));
-        StepVerifier.create(reactiveRedisTemplate.opsForValue().set("B38",booking,40))
+        when(valueOperations.set(anyString(), any(), any())).thenReturn(Mono.just(true));
+        StepVerifier.create(reactiveRedisTemplate.opsForValue().set("B38", booking, 40))
                 .expectComplete();
     }
 }

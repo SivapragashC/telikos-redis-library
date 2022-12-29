@@ -17,7 +17,7 @@ import java.time.Duration;
 @ConfigurationProperties("cache")
 @Getter
 @Setter
-public class CacheImpl<K,V> implements ICache<K,V> {
+public class CacheImpl<K, V> implements ICache<K, V> {
 
     @Autowired
     ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate;
@@ -26,37 +26,28 @@ public class CacheImpl<K,V> implements ICache<K,V> {
 
     @Override
     public Mono<V> get(K key) {
-        try {
-            log.info("Trying to get from cache for this key {}", key);
-            return (Mono<V>) reactiveRedisTemplate.opsForValue().get(key);
-        } catch (Exception e) {
-            log.error("Exception occurred while fetching data from cache {}", e.getMessage());
-            throw new CacheException(e.getMessage());
-        }
-
+        log.info("Trying to get from cache for this key {}", key);
+        return (Mono<V>) reactiveRedisTemplate.opsForValue().get(key).doOnError(e -> {
+            log.error("In library {}", e.getMessage());
+            throw new CacheException(Constants.GET_CACHE_EXCEPTION);
+        });
     }
 
     @Override
     public Mono<Boolean> put(K key, V value) {
-        try {
-            log.info("Writing to cache with key ---> {}, value ---> {}, ttl ---> {}s", key, value, ttl);
-            return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofSeconds(ttl));
-        }
-        catch (Exception e) {
-            log.error("Exception occurred while fetching data from cache {}", e.getMessage());
-            throw new CacheException(e.getMessage());
-        }
+        log.info("Writing to cache with key ---> {}, value ---> {}, ttl ---> {}s", key, value, ttl);
+        return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofSeconds(ttl)).doOnError(e -> {
+            log.error("In library {}", e.getMessage());
+            throw new CacheException(Constants.PUT_CACHE_EXCEPTION);
+        });
     }
 
-    public Mono<Boolean> put(Object key, Object value, int entryTtl){
-        try {
-            log.info("Writing to cache with key ---> {}, value ---> {}, entry level ttl ---> {}s",key,value,entryTtl);
-            return reactiveRedisTemplate.opsForValue().set(key, value , Duration.ofSeconds(entryTtl));
-        }
-        catch (Exception e) {
-            log.error("Exception occurred while fetching data from cache {}", e.getMessage());
-            throw new CacheException(e.getMessage());
-        }
+    public Mono<Boolean> put(Object key, Object value, int entryTtl) {
+        log.info("Writing to cache with key ---> {}, value ---> {}, entry level ttl ---> {}s", key, value, entryTtl);
+        return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofSeconds(entryTtl)).doOnError(e -> {
+            log.error("In library {}", e.getMessage());
+            throw new CacheException(Constants.PUT_CACHE_EXCEPTION);
+        });
     }
 
 
