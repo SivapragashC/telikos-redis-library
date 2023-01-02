@@ -1,6 +1,6 @@
 package com.example.telikosredislibrary;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +15,13 @@ import java.time.Duration;
 @Service
 @Slf4j
 @ConfigurationProperties("cache")
-@Getter
 @Setter
 public class CacheImpl<K, V> implements ICache<K, V> {
 
     @Autowired
     ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate;
 
-    private int ttl = 40;
+    private int ttl =Constants.DEFAULT_TTL;
 
     @Override
     public Mono<V> get(K key) {
@@ -35,15 +34,15 @@ public class CacheImpl<K, V> implements ICache<K, V> {
 
     @Override
     public Mono<Boolean> put(K key, V value) {
-        log.info("Writing to cache with key ---> {}, value ---> {}, ttl ---> {}s", key, value, ttl);
+        log.info("Writing to cache with key {}, value {}, default_ttl {}s", key, value, ttl);
         return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofSeconds(ttl)).doOnError(e -> {
             log.error("In library {}", e.getMessage());
             throw new CacheException(Constants.PUT_CACHE_EXCEPTION);
         });
     }
 
-    public Mono<Boolean> put(Object key, Object value, int entryTtl) {
-        log.info("Writing to cache with key ---> {}, value ---> {}, entry level ttl ---> {}s", key, value, entryTtl);
+    public Mono<Boolean> put(K key, V value, int entryTtl) {
+        log.info("Writing to cache with key {}, value {}, entry level ttl {}s", key, value, entryTtl);
         return reactiveRedisTemplate.opsForValue().set(key, value, Duration.ofSeconds(entryTtl)).doOnError(e -> {
             log.error("In library {}", e.getMessage());
             throw new CacheException(Constants.PUT_CACHE_EXCEPTION);

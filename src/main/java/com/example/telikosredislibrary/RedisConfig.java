@@ -22,9 +22,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @ConfigurationProperties(prefix = "redison-cache")
-@Data
 @ConditionalOnProperty(name = "enableCache", havingValue = "true")
-@Getter
 public class RedisConfig {
 
     @Autowired

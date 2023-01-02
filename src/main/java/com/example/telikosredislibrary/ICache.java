@@ -1,9 +1,7 @@
 package com.example.telikosredislibrary;
 
-import org.springframework.stereotype.Indexed;
 import reactor.core.publisher.Mono;
 
-@Indexed
 public interface ICache<K, V> {
     Mono<V> get(K key);
 
