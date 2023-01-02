@@ -2,9 +2,19 @@
 
 Step1: Import this as a maven jar dependency in any of the applications where caching is required
 
-Step2: Create a class which extends CacheImpl from telikos-redis-library similar to Repository
+Step2: Use @EnableCustomCaching in the main class of the consumer service
+       
+       Example: 
+       @SpringBootApplication
+       @EnableCustomCaching
+       public class TelikosRedisConsumerApplication {
 
-Step3: Autowire the class created by extending CacheImpl in the consumer service
+            public static void main(String[] args) {
+                 SpringApplication.run(TelikosRedisConsumerApplication.class, args);
+            }
+        }
+
+Step3: Autowire the class CacheImpl in the consumer service
 
 Step4: Call get and put methods of CacheImpl class from telikos-redis-library
 
