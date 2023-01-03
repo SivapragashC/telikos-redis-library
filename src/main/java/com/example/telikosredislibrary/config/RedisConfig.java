@@ -1,5 +1,6 @@
 package com.example.telikosredislibrary.config;
 
+import com.example.telikosredislibrary.constant.Constants;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
@@ -28,8 +29,8 @@ public class RedisConfig {
     @Bean()
     RedissonClient redisson() {
         Config config = new Config();
-        String redisProtocol = Boolean.parseBoolean(env.getProperty("redis.ssl")) ? "redis://" : "rediss://";
-        config.useSingleServer().setAddress(redisProtocol + env.getProperty("redis.host")  +  ":" +   Integer.parseInt(env.getProperty("redis.port")));
+        String redisProtocol = Boolean.parseBoolean(env.getProperty(Constants.REDIS_SSL)) ? "redis://" : "rediss://";
+        config.useSingleServer().setAddress(redisProtocol + env.getProperty(Constants.REDIS_HOST)  +  ":" +   Integer.parseInt(env.getProperty(Constants.REDIS_PORT)));
         return Redisson.create(config);
     }
 
