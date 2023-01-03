@@ -1,11 +1,13 @@
 package com.example.telikosredislibrary.service;
 
+import com.example.telikosredislibrary.config.YamlPropertySourceFactory;
 import com.example.telikosredislibrary.constant.Constants;
 import com.example.telikosredislibrary.exception.CacheException;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -17,12 +19,13 @@ import java.time.Duration;
 @Slf4j
 @ConfigurationProperties("cache")
 @Setter
+@PropertySource(value="classpath:redis.yml",factory = YamlPropertySourceFactory.class)
 public class CacheImpl<K, V> implements ICache<K, V> {
 
     @Autowired
     ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate;
 
-    private int ttl = Constants.DEFAULT_TTL;
+    private int ttl;
 
     @Override
     public Mono<V> get(K key) {
