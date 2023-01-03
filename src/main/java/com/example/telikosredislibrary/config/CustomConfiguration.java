@@ -1,5 +1,6 @@
-package com.example.telikosredislibrary;
+package com.example.telikosredislibrary.config;
 
+import com.example.telikosredislibrary.service.CacheImpl;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration

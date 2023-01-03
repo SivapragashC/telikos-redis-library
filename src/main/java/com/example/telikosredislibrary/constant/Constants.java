@@ -1,4 +1,4 @@
-package com.example.telikosredislibrary;
+package com.example.telikosredislibrary.constant;
 
 public class Constants {
 

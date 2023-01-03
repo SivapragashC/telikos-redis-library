@@ -1,5 +1,6 @@
 package com.example.telikosredislibrary;
 
+import com.example.telikosredislibrary.service.CacheImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.redisson.api.RedissonClient;

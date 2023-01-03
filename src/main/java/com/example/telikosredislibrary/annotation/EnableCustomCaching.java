@@ -1,4 +1,4 @@
-package com.example.telikosredislibrary;
+package com.example.telikosredislibrary.annotation;
 
 
 import org.springframework.context.annotation.Import;
