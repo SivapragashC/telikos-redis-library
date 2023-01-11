@@ -20,7 +20,7 @@ import java.time.Duration;
 @ConfigurationProperties("cache")
 @Setter
 @PropertySource(value="classpath:redis.yml",factory = YamlPropertySourceFactory.class)
-public class CacheImpl<K, V> implements ICache<K, V> {
+public class CacheService<K, V> implements ICache<K, V> {
 
     @Autowired
     ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate;
